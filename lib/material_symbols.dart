@@ -5,8 +5,12 @@ abstract class MaterialSymbols {
   static const accountCircle = IconData(0xe853, fontFamily: "MaterialSymbols");
   static const add = IconData(0xe145, fontFamily: "MaterialSymbols");
   static const arrowBack = IconData(0xe5c4, fontFamily: "MaterialSymbols");
+  static const arrowDropDown = IconData(0xe5c5, fontFamily: "MaterialSymbols");
+  static const arrowDropUp = IconData(0xe5c7, fontFamily: "MaterialSymbols");
   static const check = IconData(0xe5ca, fontFamily: "MaterialSymbols");
   static const checkCircle = IconData(0xe86c, fontFamily: "MaterialSymbols");
+  static const chevronLeft = IconData(0xe5cb, fontFamily: "MaterialSymbols");
+  static const chevronRight = IconData(0xe5cc, fontFamily: "MaterialSymbols");
   static const calendarMonth = IconData(0xebcc, fontFamily: "MaterialSymbols");
   static const cancel = IconData(0xe5c9, fontFamily: "MaterialSymbols");
   static const close = IconData(0xe5cd, fontFamily: "MaterialSymbols");
@@ -48,6 +52,7 @@ abstract class MaterialSymbols {
   static const task = IconData(0xf075, fontFamily: "MaterialSymbols");
   static const thumbUp = IconData(0xe8dc, fontFamily: "MaterialSymbols");
   static const timer = IconData(0xe425, fontFamily: "MaterialSymbols");
+  static const tour = IconData(0xef75, fontFamily: "MaterialSymbols");
   static const trendingDown = IconData(0xe8e3, fontFamily: "MaterialSymbols");
   static const trendingFlat = IconData(0xe8e4, fontFamily: "MaterialSymbols");
   static const trendingUp = IconData(0xe8e5, fontFamily: "MaterialSymbols");
