@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-typedef StoreData = Map<String, dynamic>;
-typedef StoreDoc = DocumentSnapshot<StoreData>;
-typedef StoreDocRef = DocumentReference<StoreData>;
-typedef StoreDocsRef = CollectionReference<StoreData>;
+typedef Data = Map<String, dynamic>;
+typedef FirestoreDocument = DocumentSnapshot<Data>;
+typedef FirestoreDocumentReference = DocumentReference<Data>;
+typedef StoreDocsRef = CollectionReference<Data>;
 typedef StoreQuery<T> = Query<T> Function(
   Object field, {
   Object? isEqualTo,
@@ -18,5 +18,5 @@ typedef StoreQuery<T> = Query<T> Function(
   Iterable<Object?>? whereNotIn,
   bool? isNull,
 });
-typedef TBD<T> = Query<StoreData> Function(StoreDocsRef docsRef);
-typedef TBD2<T> = Query<StoreData> Function(Query<StoreData> docsRef);
+typedef TBD<T> = Query<Data> Function(StoreDocsRef docsRef);
+typedef TBD2<T> = Query<Data> Function(Query<Data> docsRef);

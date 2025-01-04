@@ -7,6 +7,7 @@ abstract class MaterialSymbols {
   static const arrowBack = IconData(0xe5c4, fontFamily: "MaterialSymbols");
   static const arrowDropDown = IconData(0xe5c5, fontFamily: "MaterialSymbols");
   static const arrowDropUp = IconData(0xe5c7, fontFamily: "MaterialSymbols");
+  static const circle = IconData(0xef4a, fontFamily: "MaterialSymbols");
   static const check = IconData(0xe5ca, fontFamily: "MaterialSymbols");
   static const checkCircle = IconData(0xe86c, fontFamily: "MaterialSymbols");
   static const chevronLeft = IconData(0xe5cb, fontFamily: "MaterialSymbols");
@@ -21,6 +22,7 @@ abstract class MaterialSymbols {
   static const edit = IconData(0xe3c9, fontFamily: "MaterialSymbols");
   static const factCheck = IconData(0xf0c5, fontFamily: "MaterialSymbols");
   static const filterList = IconData(0xe152, fontFamily: "MaterialSymbols");
+  static const flag = IconData(0xe153, fontFamily: "MaterialSymbols");
   static const foundation = IconData(0xf200, fontFamily: "MaterialSymbols");
   static const groups = IconData(0xf233, fontFamily: "MaterialSymbols");
   static const home = IconData(0xe88a, fontFamily: "MaterialSymbols");
@@ -51,6 +53,7 @@ abstract class MaterialSymbols {
   static const star = IconData(0xe838, fontFamily: "MaterialSymbols");
   static const summarize = IconData(0xf071, fontFamily: "MaterialSymbols");
   static const task = IconData(0xf075, fontFamily: "MaterialSymbols");
+  static const target = IconData(0xe719, fontFamily: "MaterialSymbols");
   static const thumbUp = IconData(0xe8dc, fontFamily: "MaterialSymbols");
   static const timer = IconData(0xe425, fontFamily: "MaterialSymbols");
   static const tour = IconData(0xef75, fontFamily: "MaterialSymbols");

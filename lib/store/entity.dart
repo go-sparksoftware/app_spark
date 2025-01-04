@@ -1,65 +1,113 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 
 import 'types.dart';
-export 'types.dart';
+
 export 'entity.dart';
+export 'types.dart';
 
 abstract class Entity {
   const Entity(this.data);
-  factory Entity.doc(StoreDoc doc) => EntityDoc(doc);
 
-  final StoreData data;
+  final Data data;
   dynamic operator [](String key) => data[key];
 }
 
-class EntityDoc extends Entity {
-  EntityDoc(this.doc) : super(doc.data() ?? {});
+abstract class SingleEntity extends Entity {
+  const SingleEntity(super.data);
 
+  dynamic get id;
+
+  factory SingleEntity.firestore(FirestoreDocument doc) => FirestoreEntity(doc);
+}
+
+abstract class DoubleEntity extends Entity {
+  const DoubleEntity(super.data);
+
+  dynamic get id {
+    assert(primaryId == secondaryId);
+    return primaryId;
+  }
+
+  dynamic get primaryId;
+
+  dynamic get secondaryId;
+}
+
+class FirestoreEntity extends SingleEntity with FirestoreMixin {
+  FirestoreEntity(this.doc) : super(doc.data() ?? {});
+
+  @override
   String get id => doc.id;
-  StoreDocRef get ref => doc.reference;
 
-  final StoreDoc doc;
+  FirestoreDocumentReference get ref => doc.reference;
+
+  final FirestoreDocument doc;
 
   static DateTime date(data) => (data as Timestamp).toDate();
 }
 
-mixin TimestampedEntity on EntityDoc {
-  DateTime get timestamp => (this["timestamp"] as Timestamp).toDate();
+class FirestoreEntity2 extends DoubleEntity with FirestoreMixin {
+  FirestoreEntity2(this.primary, this.secondary)
+      : super({...?primary.data(), ...?secondary.data()});
+
+  @override
+  dynamic get id {
+    assert(primaryId == secondaryId);
+    return primaryId;
+  }
+
+  final FirestoreDocument primary;
+  final FirestoreDocument secondary;
+
+  @override
+  String get primaryId => primary.id;
+  FirestoreDocumentReference get primaryRef => primary.reference;
+
+  @override
+  String get secondaryId => primary.id;
+  FirestoreDocumentReference get secondaryRef => primary.reference;
 }
 
-mixin NameOnlyEntity on EntityDoc {
-  String get name => this["name"];
+mixin FirestoreMixin on Entity {
+  FirestoreUtility get utility => FirestoreUtility(this);
+
+  dynamic get(String name) => utility.get(name);
 }
 
-mixin NamedEntity on EntityDoc {
+mixin TimestampedEntity on FirestoreMixin {
+  DateTime get timestamp => utility.date("timestamp");
+}
+
+mixin NamedEntity on FirestoreMixin {
   String get name => this["name"];
   String? get description => this["desc"];
 }
 
-@immutable
-abstract class EntityInfo<T extends Entity> {
-  const EntityInfo();
-  String get path;
+class FirestoreUtility {
+  const FirestoreUtility(this.entity);
 
-  String get queryPath =>
-      path.endsWith("/") ? path.substring(0, path.length - 1) : path;
+  final Entity entity;
 
-  String get groupPath =>
-      queryPath.startsWith("/") ? queryPath.substring(1) : queryPath;
+  DateTime date(String name) {
+    final Timestamp timestamp = get(name);
+    return timestamp.toDate();
+  }
 
-  T map(StoreDoc doc);
-}
+  dynamic get(String name) {
+    dynamic current = entity.data;
+    for (final key in name.split(".")) {
+      if (current case Map<String, dynamic> temp) {
+        current = temp[key];
+      } else {
+        return null;
+      }
+    }
+    return current;
+  }
 
-class CombinedEntityDoc extends Entity {
-  CombinedEntityDoc(this.doc1, this.doc2)
-      : super({...?doc1.data(), ...?doc2.data()});
-
-  String get id1 => doc1.id;
-  StoreDocRef get ref1 => doc1.reference;
-  final StoreDoc doc1;
-
-  String get id2 => doc1.id;
-  StoreDocRef get ref2 => doc1.reference;
-  final StoreDoc doc2;
+  T? map<T>(String name, T Function(dynamic data) map) {
+    final data = get(name);
+    if (data == null) return null;
+    return map(data);
+  }
 }
