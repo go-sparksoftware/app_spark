@@ -18,3 +18,5 @@ typedef StoreQuery<T> = Query<T> Function(
   Iterable<Object?>? whereNotIn,
   bool? isNull,
 });
+typedef TBD<T> = Query<StoreData> Function(StoreDocsRef docsRef);
+typedef TBD2<T> = Query<StoreData> Function(Query<StoreData> docsRef);

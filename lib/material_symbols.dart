@@ -44,6 +44,7 @@ abstract class MaterialSymbols {
   static const settings = IconData(0xe8b8, fontFamily: "MaterialSymbols");
   static const settingsAccountBox =
       IconData(0xf835, fontFamily: "MaterialSymbols");
+  static const share = IconData(0xe80d, fontFamily: "MaterialSymbols");
   static const sortByAlpha = IconData(0xe053, fontFamily: "MaterialSymbols");
   static const sportsMartialArts =
       IconData(0xeae9, fontFamily: "MaterialSymbols");

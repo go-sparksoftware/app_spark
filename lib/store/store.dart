@@ -20,6 +20,13 @@ abstract class Store<T extends Entity> {
     return _constructor!(info, context);
   }
 
+  static T create<T extends Store<U>, U extends Entity>(EntityInfo<U> info,
+      {UserContext? context}) {
+    assert(_constructor != null,
+        "A Store constructor has not been set. Call Store.init() to set the constructor.");
+    return _constructor!(info, context) as T;
+  }
+
   final EntityInfo<T> info;
 
   FutureOr<dynamic> id();
@@ -27,7 +34,10 @@ abstract class Store<T extends Entity> {
   Stream<T> streamOne(id);
   Stream<T?> streamOneOrNull(id);
   Stream<Iterable<T>> streamAll();
+  Stream<Iterable<U>> streamMany<U>(List ids,
+      {required U Function(T item) map});
   Stream<Iterable<T>> streamSome(query);
+  Stream<Iterable<T>> streamGroup(query);
 
   static StoreConstructor? _constructor;
   static void init({required StoreConstructor constructor}) {
@@ -62,14 +72,25 @@ class FirestoreStore<T extends Entity> extends Store<T> {
       docsOf().snapshots().map((snaps) => snaps.docs.map(info.map));
 
   @override
-  Stream<Iterable<T>> streamSome(covariant StoreQuery query) => docsOf()
-      .where(query)
-      .snapshots()
-      .map((snaps) => snaps.docs.map(info.map));
+  Stream<Iterable<T>> streamSome(covariant TBD<T> query) =>
+      query(docsOf()).snapshots().map((snaps) => snaps.docs.map(info.map));
 
-  StoreDocRef refOf(String id) => firestore.doc("${info.normalizedPath}/$id");
+  @override
+  Stream<Iterable<T>> streamGroup(covariant TBD2<T> query) =>
+      query(groupDocsOf()).snapshots().map((snaps) => snaps.docs.map(info.map));
+
+  @override
+  Stream<Iterable<U>> streamMany<U>(covariant List<String> ids,
+      {required U Function(T item) map}) {
+    final streams = ids.map((id) => streamOne(id));
+    return CombineLatestStream.list(streams).map((x) => x.map(map));
+  }
+
+  StoreDocRef refOf(String id) => firestore.doc("${info.queryPath}/$id");
 
   Future<StoreDoc> docOf(String id) async => await refOf(id).get();
 
-  StoreDocsRef docsOf() => firestore.collection(info.normalizedPath);
+  StoreDocsRef docsOf() => firestore.collection(info.queryPath);
+
+  Query<StoreData> groupDocsOf() => firestore.collectionGroup(info.groupPath);
 }

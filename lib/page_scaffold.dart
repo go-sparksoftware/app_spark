@@ -12,11 +12,12 @@ export 'build_options.dart';
 export 'destination.dart';
 export 'window_sizes.dart';
 
-typedef AnyDataBodyBuilder<T> = T Function(UserContext data, BuildOptions info);
+typedef AnyDataBodyBuilder<T> = T Function(
+    UserContext userContext, BuildOptions info);
 typedef EmptyPageDataBuilder<T> = T Function(
-    EmptyUserContext data, BuildOptions info);
+    EmptyUserContext userContext, BuildOptions info);
 typedef PopulatedPageDataBuilder<T> = T Function(
-    CompleteUserContext data, BuildOptions info);
+    CompleteUserContext userContext, BuildOptions info);
 typedef NoDataPageDataBuilder<T> = T Function(BuildOptions info);
 
 class PageScaffold extends StatefulWidget {
