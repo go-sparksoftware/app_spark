@@ -50,22 +50,15 @@ class FirestoreStore<T extends Entity> extends Store<T> {
 
   @override
   Stream<Iterable<U>> streamFrom<E extends Entity, U>(
-      Stream<Iterable<E>> stream,
-      {required Iterable Function(Iterable<E> items) ids,
-      required bool Function(E item1, T item2) compare,
-      required U Function(E original, T item) map}) {
-    final x = stream.flatMap((originals) {
-      final y = streamMany(
-        ids(originals).cast(),
-        map: (item) {
-          final o = originals.firstWhere((oo) => compare(oo, item));
-          return map(o, item);
-        },
-      );
-      return y;
-    });
-    return x;
-  }
+          Stream<Iterable<E>> stream,
+          {required Iterable Function(Iterable<E> items) ids,
+          required bool Function(E item1, T item2) compare,
+          required U Function(E original, T item) map}) =>
+      stream.flatMap((originals) => streamMany(
+            ids(originals).cast(),
+            map: (item) =>
+                map(originals.firstWhere((oo) => compare(oo, item)), item),
+          ));
 
   FirestoreDocumentReference refOf(String id) =>
       firestore.doc("${context.queryPath}/$id");
