@@ -42,10 +42,29 @@ class FirestoreStore<T extends Entity> extends Store<T> {
           .map((snaps) => snaps.docs.map(context.map));
 
   @override
-  Stream<Iterable<U>> streamMany<U>(covariant List<String> ids,
+  Stream<Iterable<U>> streamMany<U>(covariant Iterable<String> ids,
       {required U Function(T item) map}) {
     final streams = ids.map((id) => streamOne(id));
     return CombineLatestStream.list(streams).map((x) => x.map(map));
+  }
+
+  @override
+  Stream<Iterable<U>> streamFrom<E extends Entity, U>(
+      Stream<Iterable<E>> stream,
+      {required Iterable Function(Iterable<E> items) ids,
+      required bool Function(E item1, T item2) compare,
+      required U Function(E original, T item) map}) {
+    final x = stream.flatMap((originals) {
+      final y = streamMany(
+        ids(originals).cast(),
+        map: (item) {
+          final o = originals.firstWhere((oo) => compare(oo, item));
+          return map(o, item);
+        },
+      );
+      return y;
+    });
+    return x;
   }
 
   FirestoreDocumentReference refOf(String id) =>

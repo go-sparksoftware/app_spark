@@ -32,8 +32,13 @@ abstract class Store<T extends Entity> {
   Stream<T> streamOne(id);
   Stream<T?> streamOneOrNull(id);
   Stream<Iterable<T>> streamAll();
-  Stream<Iterable<U>> streamMany<U>(List ids,
+  Stream<Iterable<U>> streamMany<U>(Iterable ids,
       {required U Function(T item) map});
+  Stream<Iterable<U>> streamFrom<A extends Entity, U>(
+      Stream<Iterable<A>> stream,
+      {required Iterable Function(Iterable<A> items) ids,
+      required bool Function(A item1, T item2) compare,
+      required U Function(A original, T item) map});
   Stream<Iterable<T>> streamSome(query);
   Stream<Iterable<T>> streamGroup(query);
 
