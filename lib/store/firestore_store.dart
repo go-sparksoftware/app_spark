@@ -10,6 +10,10 @@ class FirestoreStore<T extends Entity> extends Store<T> {
       : _firestore = firestore;
   final FirebaseFirestore? _firestore;
 
+  @override
+  FirestoreCommandContext get commandContext =>
+      FirestoreCommandContext(firestore: firestore);
+
   FirebaseFirestore get firestore => _firestore ?? FirebaseFirestore.instance;
 
   @override

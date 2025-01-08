@@ -1,8 +1,9 @@
 import 'dart:async';
 
-import 'entity.dart';
-import 'store_context.dart';
+import 'package:app_spark/store.dart';
 
+export 'command.dart';
+export 'date_time_extension.dart';
 export 'entity.dart';
 export 'store_context.dart';
 
@@ -16,6 +17,8 @@ abstract class Store<T extends Entity> {
         "A Store constructor has not been set. Call Store.init() to set the constructor.");
     return _constructor!(context);
   }
+
+  CommandContext get commandContext;
 
   static T create<T extends Store<U>, U extends Entity>(
     StoreContext<U> context,
