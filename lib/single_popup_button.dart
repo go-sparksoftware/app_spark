@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'material_symbols.dart';
+import 'noop.dart';
 
 class SinglePopupButton extends StatelessWidget {
   const SinglePopupButton({
@@ -11,16 +12,16 @@ class SinglePopupButton extends StatelessWidget {
     this.leadingTitle,
     this.titlePadding = EdgeInsets.zero,
     this.size,
-    this.actions = const [],
-    this.titleActions = const [],
+    this.actions = empty1,
+    this.titleActions = empty1,
     this.titleContentSpacing = 8,
   });
 
   final Widget? title;
   final Widget? leadingTitle;
   final EdgeInsetsGeometry titlePadding;
-  final List<Widget> titleActions;
-  final List<Widget> actions;
+  final List<Widget> Function(MenuController controller) titleActions;
+  final List<Widget> Function(MenuController controller) actions;
   final EdgeInsetsGeometry contentPadding;
   final Size? size;
   final double titleContentSpacing;
@@ -42,7 +43,7 @@ class SinglePopupButton extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              ...titleActions,
+              ...titleActions(controller),
               CloseButton(
                 onPressed: () => controller.close(),
               )
@@ -69,7 +70,7 @@ class SinglePopupButton extends StatelessWidget {
           //   ])
           // ]),
           Row(
-            children: [...actions],
+            children: [...actions(controller)],
           )
         ],
       ),
